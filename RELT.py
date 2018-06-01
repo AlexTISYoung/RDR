@@ -29,7 +29,7 @@ parser.add_argument('ids', type=str, help='Location of file with ids in order of
 parser.add_argument('R', type=str, help='Location of file giving the relatedness matrix')
 parser.add_argument('trait', type=str, help='Location of file with trait file')
 parser.add_argument('outprefix', type=str, help='Output prefix')
-parser.add_agument('--rel_thresh',type=float,help='Maximum relatedness of pairs used to estimate heritability',default = 0.05)
+parser.add_argument('--rel_thresh',type=float,help='Maximum relatedness of pairs used to estimate heritability',default = 0.05)
 parser.add_argument('--covariates', type=str, help='File with covariate matrix', default=None)
 parser.add_argument('--trait_index', type=int, help='Index of trait to analyse in trait file', default=1)
 args = parser.parse_args()
