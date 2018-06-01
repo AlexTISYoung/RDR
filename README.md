@@ -1,82 +1,54 @@
-# hlmm
-hlmm is a python library for fitting heteroskedastic linear mixed models to genetic data. 
+# RDR
+Here we provide scripts for estimating heritability using some of the methods in a forthcoming paper on
+estimating heritability by relatedness disequilibrium regression
 
-A heteroskedastic linear model (HLM) can model the effect
-of a set of variables on the mean of a response (such as a continuous phenotype) and the 
-effect of a (potentially different) set of variables of the variability of the response
+# RELT
 
-A HLM models all effects on both the mean and variance of a response as fixed effects.
-A heteroskedastic linear mixed model (HLMM) adds modelling of random effects of a set of variables on the mean of the response. 
+This script performs relatedness thresholded (RELT) heritability estimation. It regresses elements of the sample
+phenotypic covariance matrix onto corresponding elements of a relatedness matrix for those pairs with relatedness
+below a user-set threshold (defaul 0.05).
 
-Modelling random effects can make fitting a HLMM very computationally demanding,
-with the number of operations scaling with the cube of sample size. 
+The script calculates standard errors of genetic variance and heritability estimates by a procedure that takes into
+account dependence between pairs. This can be computationally demanding for large sample sizes.
 
-The package hlmm provides the ability to fit a HLMM
-much more quickly when the number of variables with random effects is small compared 
-to the sample size. We use an algorithm whose operations scale in proportion to the sample
-size multiplied by the number of random effects squared. 
+It takes a binary relatedness matrix as input. The matrix is formatted the same way as produced by
+GCTA with the --make-grm-bin option set. The matrix is in lower-triangular order with 32 bit floating point numbers.
 
-# Main features:
+Associated with the relatedness matrix is an plain text id file. The first column of the id file gives the ids of the
+individuals in the order that they appear in the relatedness matrix. If IDs are specified uniquely by the first column
+of the GCTA grm.id file, then the GCTA grm.id file can be used.
 
-HLM class: given data, find the parameters that maximise
-the likelihood and their sampling distribution. 
+The trait file is a plain text file with columns: FID, IID, trait1, trait2, etc.
 
-HLMM class: given data, find the parameters that maximise
-the likelihood and their sampling distribution. 
+If covariates are supplied, the trait will first be adjusted for covariates before heritability is estimated.
 
-hlmm_chr.py: command line script that fits heteroskedastic linear models or 
-heteroskedastic linear mixed models to a contiguous segment of the genome.
-The script takes bed formatted genotypes as input. and can incorporate
-covariates for the fixed effects on the mean and/or variance. 
+The script outputs a file outprefix.herit that records variance component estimates and standard errors.
 
-# Easy installation
+Given a trait file y.txt and the output of GCTA --make-grm-bin as R.grm.bin and R.grm.id, an example usage would be
 
-We recommend installing using pip (https://pip.pypa.io/en/stable/). 
-At the command line, type
+    'python RELT.py R.grm.id R.grm.bin y.txt y'
 
-    'sudo pip install hlmm'
-    
-# Documentation
+# RDR
 
-We recommend reading the documentation for this package (http://hlmm.readthedocs.io/en/master/) and 
-working through the tutorial (http://hlmm.readthedocs.io/en/master/tutorial.html).
+This script performs relatedness disequilibrium regression (RELT) heritability estimation. It regresses elements of the sample
+phenotypic covariance matrix jointly onto corresponding elements of proband, parental and parent-offspring relatednes matrices.
 
-# Detailed Package Install Instructions
+The script calculates standard errors of genetic variance and heritability estimates by a procedure that takes into
+account dependence between pairs. This can be computationally demanding for large sample sizes.
 
-hlmm has the following dependencies:
+It takes binary relatedness matrices as input. The matrices are formatted the same way as produced by
+GCTA with the --make-grm-bin option set. The matrix is in lower-triangular order with 32 bit floating point numbers.
 
-python 2.7
+Associated with each relatedness matrix is an plain text id file. The first column of the id file gives the ids of the
+individuals in the order that they appear in the relatedness matrix.
 
-Packages: 
+The trait file is a plain text file with columns: FID, IID, trait1, trait2, etc.
 
-- numpy
-- scipy
-- pysnptools
+If covariates are supplied, the trait will first be adjusted for covariates before heritability is estimated.
 
-We highly recommend using a python distribution such as Anaconda (https://store.continuum.io/cshop/anaconda/). 
-This will come with both numpy and scipy installed and can include an MKL-compiled distribution
-for optimal speed. 
+The script outputs a file outprefix.herit that records variance component estimates and standard errors.
 
-To install from source, clone the git repository, and in the directory
-containing the HLMM source code, at the shell type
+# Sib-Regression
 
-    'sudo python setupy.py install'
-
-or, on the windows command prompt, type
-
-    'python setup.py install' 
-    
-# Running tests
-
-The tests directory contains scripts for testing the computation of 
-the likelihoods, gradients, and maximum likelihood solutions for
-both heteroskedastic linear models (test_hetlm.py) and
-for heteroskedastic linear mixed models (test_hetlmm.py).
-To run these tests, a further dependency is required: numdifftools. 
-
-To run the tests, first install hlmm. Change to the tests/ directory and at the shell type
-
-    'python test_hetlm.py'
-    'python test_hetlmm.py'
-
-Both tests should run without any failures. 
+This script performs Sib-Regression heritability estimation. It performs simple univariate regression of
+the squared difference of siblings' phenotype observations onto their genetic relatedness.
