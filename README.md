@@ -28,6 +28,11 @@ Given a trait file y.txt and the output of GCTA --make-grm-bin as R.grm.bin and 
 
     'python RELT.py R.grm.id R.grm.bin y.txt y'
 
+# Sib-Regression
+
+This script performs Sib-Regression heritability estimation. It performs simple univariate regression of
+the squared difference of siblings' phenotype observations onto their genetic relatedness.
+
 # RDR
 
 This script performs relatedness disequilibrium regression (RELT) heritability estimation. It regresses elements of the sample
@@ -47,8 +52,3 @@ The trait file is a plain text file with columns: FID, IID, trait1, trait2, etc.
 If covariates are supplied, the trait will first be adjusted for covariates before heritability is estimated.
 
 The script outputs a file outprefix.herit that records variance component estimates and standard errors.
-
-# Sib-Regression
-
-This script performs Sib-Regression heritability estimation. It performs simple univariate regression of
-the squared difference of siblings' phenotype observations onto their genetic relatedness.
